@@ -16,7 +16,6 @@ StreamPlay is a full-stack video streaming application that allows users to:
 - Built with **Next.js 13** using the new App Router
 - TypeScript for type safety
 - Client-side authentication with Firebase Auth
-- Responsive design for all devices
 - File structure:
   ```
   sp-web-client/
