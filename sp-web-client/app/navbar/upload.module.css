@@ -1,0 +1,33 @@
+.uploadInput {
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+  position: absolute;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.uploadButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  border: none;
+  border-radius: 20px;
+  color: #0f0f0f;
+  cursor: pointer;
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0 16px;
+  height: 40px;
+  transition: background-color 0.15s;
+}
+
+.uploadButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.uploadButton:active {
+  background-color: rgba(0, 0, 0, 0.15);
+}
