@@ -10,10 +10,10 @@ import
 } from "firebase/auth";
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCNtRTIWP8q_grkRaO353cHUDGWfwwFP4Q",
-  authDomain: "streamplay-1a994.firebaseapp.com",
-  projectId: "streamplay-1a994",
-  appId: "1:558417751810:web:4d514b6fea7035fc661c1b"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  appId: ""
 };
 
 // Initialize Firebase
