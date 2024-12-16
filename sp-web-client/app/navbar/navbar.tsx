@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import styles from './navbar.module.css'
+import styles from './navbar.module.css';
 import Link from "next/link";
 import SignIn from "./sign-in";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
@@ -21,11 +21,22 @@ export default function Navbar() {
 
   return (
     <nav className={styles.nav}>
-      <Link href="/">
-          <Image src="/youtube-logo.svg" alt="Youtube Logo" width={90} height={20} className={styles.logo} />
-      </Link>
+      <div className={styles.leftSection}>
+        <Link href="/" className={styles.logoContainer}>
+          <Image 
+            src="/streamplay-logo.svg" 
+            alt="StreamPlay Logo" 
+            width={32} 
+            height={32} 
+            className={styles.logo}
+          />
+          <span className={styles.brandName}>StreamPlay</span>
+        </Link>
+      </div>
+      <div className={styles.rightSection}>
         {user && <Upload />}
-      <SignIn user={user}/>
+        <SignIn user={user}/>
+      </div>
     </nav>
   );
 }

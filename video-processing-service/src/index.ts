@@ -33,8 +33,7 @@ app.post("/process-video", async (req, res) => {
       uid: videoId.split('-')[0],
       status: "processing",
       title: "",
-      description: "",
-      thumbnailUrl: "",
+      description: ""
     })
   }
   // Download the raw video from cloud storage

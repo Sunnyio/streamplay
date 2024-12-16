@@ -1,16 +1,61 @@
-.signin {
-  display: inline-flex;
-  border: 1px solid gray;
-  color:blue;
-  padding: 10px 20px;
-  border-radius: 24px;
-  font-family: 'Roboto', sans-serif;
+.signInContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.signInButton, .signOutButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: white;
+  color: #606060;
+  border: 1px solid #e0e0e0;
 }
 
-.signin:hover {
-  background-color: #f0f0f0;
-  border: 1px solid transparent;
+.signInButton:hover, .signOutButton:hover {
+  background-color: #f2f2f2;
+  border-color: #d0d0d0;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Add hover effect for avatar */
+.avatar:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .signInButton, .signOutButton {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .avatar {
+    width: 28px;
+    height: 28px;
+  }
 }

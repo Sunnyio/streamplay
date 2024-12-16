@@ -2,14 +2,58 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1em;
+  padding: 0.8rem 2rem;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 56px;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
 }
 
 .logoContainer {
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #030303;
 }
 
 .logo {
-  width: 90px;
-  height: 20px;
+  object-fit: contain;
+}
+
+.brandName {
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Add these styles if you want hover effects */
+.logoContainer:hover {
+  opacity: 0.9;
+}
+
+/* If you want to make it responsive */
+@media (max-width: 768px) {
+  .nav {
+    padding: 0.8rem 1rem;
+  }
+  
+  .brandName {
+    font-size: 1rem;
+  }
 }

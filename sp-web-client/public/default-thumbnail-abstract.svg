@@ -1,0 +1,25 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="640" height="360" fill="url(#abstractGradient)"/>
+    
+    <!-- Abstract shapes -->
+    <path d="M0 360L213.333 0L426.667 360L640 0" stroke="white" stroke-opacity="0.1" stroke-width="2"/>
+    <path d="M0 0L213.333 360L426.667 0L640 360" stroke="white" stroke-opacity="0.1" stroke-width="2"/>
+    
+    <!-- Center play button -->
+    <g filter="url(#shadow)">
+        <circle cx="320" cy="180" r="45" fill="white" fill-opacity="0.2"/>
+        <path d="M337 180L310 196.65L310 163.35L337 180Z" fill="white"/>
+    </g>
+    
+    <!-- Gradients and filters -->
+    <defs>
+        <linearGradient id="abstractGradient" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" style="stop-color:#2B6CB0"/>
+            <stop offset="100%" style="stop-color:#1A365D"/>
+        </linearGradient>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="black" flood-opacity="0.3"/>
+        </filter>
+    </defs>
+</svg>

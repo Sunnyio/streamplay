@@ -1,15 +1,20 @@
 import {Firestore} from "firebase-admin/firestore";
+import {initializeApp} from "firebase-admin/app";
+import { credential } from "firebase-admin";
+
+initializeApp({
+  credential: credential.applicationDefault()
+});
 
 const firestore = new Firestore();
 
 const videoCollectionId = "videos";
 export interface Video {
-  id: string;
-  uid: string;
-  status: "processing" | "processed" | "error";
-  title: string;
-  description: string;
-  thumbnailUrl: string;
+  id?: string;
+  uid?: string;
+  status?: "processing" | "processed" | "error";
+  title?: string;
+  description?: string;
   fileName?: string;
 }
 

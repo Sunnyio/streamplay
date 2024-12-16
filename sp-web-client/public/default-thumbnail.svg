@@ -1,0 +1,32 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background with modern gradient -->
+    <rect width="640" height="360" fill="url(#modernGradient)"/>
+    
+    <!-- Decorative circles -->
+    <circle cx="160" cy="180" r="120" fill="url(#circleGradient)" fill-opacity="0.1"/>
+    <circle cx="480" cy="180" r="160" fill="url(#circleGradient)" fill-opacity="0.1"/>
+    
+    <!-- Play button container -->
+    <circle cx="320" cy="180" r="48" fill="white" fill-opacity="0.15"/>
+    <circle cx="320" cy="180" r="46" stroke="white" stroke-width="2" fill="transparent"/>
+    
+    <!-- Play button triangle -->
+    <path d="M335 180L310 195.981L310 164.019L335 180Z" fill="white"/>
+    
+    <!-- StreamPlay watermark -->
+    <text x="320" y="300" fill="white" font-family="Arial" font-size="16" text-anchor="middle" opacity="0.6">
+        Click to play
+    </text>
+    
+    <!-- Gradients -->
+    <defs>
+        <linearGradient id="modernGradient" x1="0" y1="0" x2="640" y2="360" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" style="stop-color:#1a365d"/>
+            <stop offset="100%" style="stop-color:#2c5282"/>
+        </linearGradient>
+        <radialGradient id="circleGradient" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" style="stop-color:white"/>
+            <stop offset="100%" style="stop-color:white" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+</svg>
