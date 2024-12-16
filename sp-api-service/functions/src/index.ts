@@ -4,8 +4,12 @@ import {initializeApp} from "firebase-admin/app";
 import {Firestore} from "firebase-admin/firestore";
 import {Storage} from "@google-cloud/storage";
 import {onCall} from "firebase-functions/v2/https";
+import {credential} from "firebase-admin";
 
-initializeApp();
+
+initializeApp({
+  credential: credential.applicationDefault(),
+});
 const firestore = new Firestore();
 const storage = new Storage();
 const rawVideoBucketName = "streamplay-raw-vid";
@@ -21,22 +25,24 @@ export interface Video {
   fileName: string;
 }
 
-export const createUser = functions.auth.user().onCreate((user) => {
+export const createUser = functions.auth.user().onCreate(async (user) => {
   const userInfo = {
     uuid: user.uid,
     email: user.email,
     photoURL: user.photoURL,
   };
 
-  firestore.collection("users").doc(user.uid).set(userInfo);
+  await firestore.collection("users").doc(user.uid).set(userInfo);
   logger.info(`User Created: ${JSON.stringify(userInfo)}`);
   return;
 });
 
 export const generateUploadUrl = onCall(
-  {cors: true},
+  {
+    cors: ["http://localhost:3000", "https://sp-web-client.vercel.app"],
+  },
   async (request) => {
-  // check if user is authenticated
+    // check if user is authenticated
     if (!request.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
@@ -64,7 +70,7 @@ export const generateUploadUrl = onCall(
 
 export const getVideos = onCall({maxInstances: 1}, async (request) => {
   const snapshot = await firestore
-    . collection(videoCollectionId)
+    .collection(videoCollectionId)
     .limit(10)
     .get();
   return snapshot.docs.map((doc) => doc.data());
