@@ -4,12 +4,9 @@ import {initializeApp} from "firebase-admin/app";
 import {Firestore} from "firebase-admin/firestore";
 import {Storage} from "@google-cloud/storage";
 import {onCall} from "firebase-functions/v2/https";
-import {credential} from "firebase-admin";
 
+initializeApp();
 
-initializeApp({
-  credential: credential.applicationDefault(),
-});
 const firestore = new Firestore();
 const storage = new Storage();
 const rawVideoBucketName = "streamplay-raw-vid";
