@@ -4,8 +4,6 @@ StreamPlay is a modern video streaming platform built with Next.js 13, Firebase,
 
 See it live at https://sp-web-client-558417751810.asia-south1.run.app/
 
-![StreamPlay Demo](public/demo-screenshot.png)
-
 ## 🌟 Features
 
 - **Video Upload & Processing**
