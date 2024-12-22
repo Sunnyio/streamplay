@@ -15,10 +15,13 @@ export interface Video {
   status?: "processing" | "processed" | "error";
   title?: string;
   description?: string;
-  fileName?: string;
+  videoFileName?: string;
+  thumbnailFileName?: string;
+  createdAt?: number;
+  duration?: number;
 }
 
-async function getVideo(videoId: string): Promise<Video | null> {
+export async function getVideo(videoId: string): Promise<Video | null> {
   const snapshot = await firestore.collection(videoCollectionId).doc(videoId).get();
   return (snapshot.data() as Video) ?? {};
 }

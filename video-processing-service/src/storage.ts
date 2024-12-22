@@ -2,6 +2,7 @@
 import { Storage } from "@google-cloud/storage";
 import fs, { readFileSync } from 'fs';
 import ffmpeg from "fluent-ffmpeg"
+import { getVideo } from "./firestore";
 
 
 const storage = new Storage()
@@ -9,6 +10,7 @@ const rawVideoBucketName = "streamplay-raw-vid"
 const processedVideoBucketName = "streamplay-processed-vid"
 const localRawVideoPath = "./raw-videos"
 const localProcessedVideoPath = "./processed-video"
+const thumbnailBucketName = "streamplay-thumbnails"
 
 // create local directories for raw and processed vidoes
 export function setupDirectories() {
@@ -22,20 +24,35 @@ export function setupDirectories() {
  * @returns A promise that resolves when the video has been processed
  */
 
-export function convertVideo(rawVideoName: string, processedVideoName: string) {
-    return new Promise <void>((resolve, reject) => {
-      ffmpeg(`${localRawVideoPath}/${rawVideoName}`)
+export function getVideoDuration(filePath: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    ffmpeg.ffprobe(filePath, (err, metadata) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(metadata.format.duration || 0);
+    });
+  });
+}
+
+export async function convertVideo(rawVideoName: string, processedVideoName: string) {
+  const rawVideoPath = `${localRawVideoPath}/${rawVideoName}`;
+  const duration = await getVideoDuration(rawVideoPath);
+  
+  return new Promise<{duration: number}>((resolve, reject) => {
+    ffmpeg(rawVideoPath)
       .outputOption("-vf", "scale=-1:360")
       .on("end", () => {
         console.log("Video processed Successfully!");
-        resolve();
+        resolve({ duration });
       })
       .on("error", (err) => {
-        console.log(`An error occured while converting video: ${err.message}`)
-        reject(err)
+        console.log(`An error occurred while converting video: ${err.message}`);
+        reject(err);
       })
-      .save(`${localProcessedVideoPath}/${processedVideoName}`)
-    })
+      .save(`${localProcessedVideoPath}/${processedVideoName}`);
+  });
 }
 
 /**
@@ -67,6 +84,12 @@ export async function uploadProcessedVideo(filename: string) {
   await bucket.file(filename).makePublic();
 }
 
+export async function makeThumbnailPublic(videoId: string) {
+  const bucket = storage.bucket(thumbnailBucketName);
+  const video = await getVideo(videoId);
+  if (!video?.thumbnailFileName) return;
+  await bucket.file(video.thumbnailFileName).makePublic();
+}
 
 /**
  * @param filepath - The path of the video file we want to delete

@@ -10,6 +10,7 @@ initializeApp();
 const firestore = new Firestore();
 const storage = new Storage();
 const rawVideoBucketName = "streamplay-raw-vid";
+const thumbnailBucketName = "streamplay-thumbnails";
 
 const videoCollectionId = "videos";
 
@@ -19,7 +20,10 @@ export interface Video {
   status: "processing" | "processed" | "error";
   title: string;
   description: string;
-  fileName: string;
+  videoFileName: string;
+  thumbnailFileName: string;
+  createdAt: number;
+  duration?: number;
 }
 
 export const createUser = functions.auth.user().onCreate(async (user) => {
@@ -39,7 +43,6 @@ export const generateUploadUrl = onCall(
     cors: ["http://localhost:3000", "https://sp-web-client.vercel.app"],
   },
   async (request) => {
-    // check if user is authenticated
     if (!request.auth) {
       throw new functions.https.HttpsError(
         "unauthenticated",
@@ -50,18 +53,37 @@ export const generateUploadUrl = onCall(
     const auth = request.auth;
     const data = request.data;
     const bucket = storage.bucket(rawVideoBucketName);
+    const thumbnailBucket = storage.bucket(thumbnailBucketName);
 
-    // Generate a unique filename for the video
-    const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
+    // Generate unique filenames
+    const videoFileName = `${auth.uid}-${Date.now()}.${data.videoExtension}`;
+    const thumbnailFileName =
+    `${auth.uid}-${Date.now()}-thumb.${data.thumbnailExtension}`;
 
-    // generate a v4 signed url for uploading a video to the bucket
-    const [url] = await bucket.file(fileName).getSignedUrl({
+    // Save initial video metadata to Firestore
+    const videoId = videoFileName.split(".")[0];
+
+    // Generate signed URLs
+    const [videoUrl] = await bucket.file(videoFileName).getSignedUrl({
       version: "v4",
       action: "write",
-      expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+      expires: Date.now() + 15 * 60 * 1000,
     });
 
-    return {url, fileName};
+    const [thumbnailUrl] = await thumbnailBucket.file(thumbnailFileName)
+      .getSignedUrl({
+        version: "v4",
+        action: "write",
+        expires: Date.now() + 15 * 60 * 1000,
+      });
+
+    return {
+      videoUrl: videoUrl,
+      videoId: videoId,
+      thumbnailUrl: thumbnailUrl,
+      videoFileName: videoFileName,
+      thumbnailFileName: thumbnailFileName,
+    };
   });
 
 
@@ -71,4 +93,31 @@ export const getVideos = onCall({maxInstances: 1}, async (request) => {
     .limit(10)
     .get();
   return snapshot.docs.map((doc) => doc.data());
+});
+
+export const addVideo = onCall({maxInstances: 1}, async (request) => {
+  if (!request.auth) {
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "Request not authenticated"
+    );
+  }
+
+  const {
+    videoId, title, description,
+    videoFileName, thumbnailFileName, createdAt,
+  } = request.data;
+
+  await firestore.collection("videos").doc(videoId).set({
+    id: videoId,
+    uid: request.auth.uid, // Add this
+    status: "processing",
+    title: title,
+    description: description,
+    videoFileName: videoFileName,
+    thumbnailFileName: thumbnailFileName,
+    createdAt: createdAt,
+  });
+
+  return {videoId};
 });

@@ -1,65 +1,76 @@
 // page.tsx
-import Image from "next/image";
+'use client';
+
 import { getVideos } from "./firebase/functions";
 import Link from "next/link";
 import styles from "./page.module.css";
+import VideoThumbnail from "./components/video-thumbnail";
+import { useEffect, useState } from "react";
+import { Video } from "./firebase/functions";
 
-const dummyTitles = [
-  "The Art of Creative Coding: A Beginner's Guide",
-  "Understanding Modern Web Development in 2024",
-  "Machine Learning Fundamentals Explained Simply",
-  "Building Scalable Applications with React",
-  "The Future of Cloud Computing: What's Next?",
-  "DevOps Best Practices for Startups",
-  "Full Stack Development: From Zero to Hero",
-  "UI/UX Design Principles for Developers",
-  "Blockchain Technology: Beyond Cryptocurrency",
-  "Artificial Intelligence in Everyday Life"
-];
+const DEFAULT_TITLE = "Title not provided";
+const DEFAULT_DESCRIPTION = "Description not provided";
+const DEFAULT_THUMBNAIL = "/dummy-thumbnail.svg";
+const THUMBNAIL_BUCKET = "https://storage.googleapis.com/streamplay-thumbnails/";
+const DEFAULT_DURATION = "2:15";
 
-const dummyDescriptions = [
-  "Learn how to blend creativity with code in this comprehensive guide",
-  "Explore the latest trends and tools in modern web development",
-  "Demystifying machine learning concepts for beginners",
-  "Master React.js with practical examples and best practices",
-  "Discover emerging trends in cloud computing technology",
-  "Essential DevOps practices for growing development teams",
-  "Complete guide to becoming a full stack developer",
-  "Design principles that every developer should know",
-  "Understanding blockchain beyond cryptocurrency applications",
-  "Real-world applications of AI in daily life"
-];
+function formatDuration(seconds: number | undefined): string {
+  if (!seconds) return DEFAULT_DURATION;
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+}
 
-export default async function Home() {
-  const videos = await getVideos();
+export default function Home() {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        setIsLoading(true);
+        const fetchedVideos = await getVideos();
+        setVideos(fetchedVideos);
+      } catch (error) {
+        // Handle error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchVideos();
+  }, []);
 
   return (
     <main className={styles.mainContainer}>
       <div className={styles.videosGrid}>
-        {videos.map((video, index) => (
+        {videos.map((video) => (
           <Link 
             key={video.id} 
-            href={`/watch?v=${video.fileName}`}
+            href={`/watch?v=${video.videoFileName}`}
             className={styles.videoCard}
           >
             <div className={styles.thumbnailContainer}>
-              <Image 
-                src="/dummy-thumbnail.svg"
-                alt={dummyTitles[index % dummyTitles.length]}
+              <VideoThumbnail 
+                src={video.thumbnailFileName ? 
+                  `${THUMBNAIL_BUCKET}${video.thumbnailFileName}` : 
+                  DEFAULT_THUMBNAIL
+                }
+                alt={video.title || DEFAULT_TITLE}
                 width={640}
                 height={360}
                 className={styles.thumbnail}
+                defaultThumbnail={DEFAULT_THUMBNAIL}
               />
               <div className={styles.duration}>
-                {`${Math.floor(Math.random() * 10 + 1)}:${String(Math.floor(Math.random() * 59)).padStart(2, '0')}`}
+                {video.duration ? formatDuration(video.duration) : DEFAULT_DURATION}
               </div>
             </div>
             <div className={styles.videoInfo}>
               <h3 className={styles.videoTitle}>
-                {dummyTitles[index % dummyTitles.length]}
+                {video.title || DEFAULT_TITLE}
               </h3>
               <p className={styles.videoDescription}>
-                {dummyDescriptions[index % dummyDescriptions.length]}
+                {video.description || DEFAULT_DESCRIPTION}
               </p>
             </div>
           </Link>
