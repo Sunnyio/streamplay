@@ -2,6 +2,8 @@
 
 StreamPlay is a modern video streaming platform built with Next.js 13, Firebase, and Google Cloud Platform. It enables users to upload, process, and stream videos with a YouTube-like experience.
 
+See it live at https://sp-web-client-558417751810.asia-south1.run.app/
+
 ![StreamPlay Demo](public/demo-screenshot.png)
 
 ## 🌟 Features
