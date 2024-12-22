@@ -1,4 +1,6 @@
 'use client';
+/* eslint-disable */
+
 import { useState } from 'react';
 import styles from './upload-modal.module.css';
 import { uploadVideo } from '../firebase/functions';

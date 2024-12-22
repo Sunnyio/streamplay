@@ -40,7 +40,7 @@ export const createUser = functions.auth.user().onCreate(async (user) => {
 
 export const generateUploadUrl = onCall(
   {
-    cors: ["http://localhost:3000", "https://sp-web-client.vercel.app"],
+    cors: ["http://localhost:3000", "https://sp-web-client-558417751810.asia-south1.run.app"],
   },
   async (request) => {
     if (!request.auth) {
@@ -90,6 +90,7 @@ export const generateUploadUrl = onCall(
 export const getVideos = onCall({maxInstances: 1}, async (request) => {
   const snapshot = await firestore
     .collection(videoCollectionId)
+    .orderBy("createdAt", "desc")
     .limit(10)
     .get();
   return snapshot.docs.map((doc) => doc.data());

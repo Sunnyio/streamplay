@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import {httpsCallable} from "firebase/functions";
 import {app} from "./firebase";
 import {getAuth} from "firebase/auth";
