@@ -7,10 +7,9 @@ See it live at https://sp-web-client-558417751810.asia-south1.run.app/
 ## 🌟 Features
 
 - **Video Upload & Processing**
-  - Support for multiple video formats
+  - Support upload for multiple video formats
   - Automatic video processing to 360p
   - Thumbnail support
-  - Progress tracking
 
 - **Video Streaming**
   - Adaptive video playback
